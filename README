@@ -10,6 +10,7 @@ Kafka RPM을 빌드하기위해 본 문서를 참고할것.
 
 spectool명령은 kafka소스와 gradle컴파일도구를 다운로드한다.
 여기는 한국이니 kafka다운로드는 국내의 사이트(ftp.kakao.com, cdnetwork, kaist 등)으로 지정하도록한다.
+spectool은 'yum install rpmdevtools' 설치가능하다     
 
 rpmbuild명령은 kafka소스를 컴파일하는 과정, 바이너리를 배포디렉토리에 재배치하는 과정, 기타과정의
 정의(설정파일, 로그파일, 계정생성 등)를 진행하여 RPM디렉토리에 최종결과물을 저장한다. (RPM패키지)
