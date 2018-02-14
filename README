@@ -1,0 +1,29 @@
+Kafka RPM을 빌드하기위해 본 문서를 참고할것.
+
+본 소스를 다운받게되면, 아래와 같은 순서로 RPM빌드를 진행할 수 있다.
+
+
+    ln -s kafka-rpm rpmbuild
+    spectool -g -R rpmbuild/SPECS/kafka.spec
+    rpmbuild -bb rpmbuild/SPECS/kafka.spec
+
+
+spectool명령은 kafka소스와 gradle컴파일도구를 다운로드한다.
+여기는 한국이니 kafka다운로드는 국내의 사이트(ftp.kakao.com, cdnetwork, kaist 등)으로 지정하도록한다.
+
+rpmbuild명령은 kafka소스를 컴파일하는 과정, 바이너리를 배포디렉토리에 재배치하는 과정, 기타과정의
+정의(설정파일, 로그파일, 계정생성 등)를 진행하여 RPM디렉토리에 최종결과물을 저장한다. (RPM패키지)
+
+결과물인 RPM을 설치하고나면 일반 kafka 압축해제디렉토리와 크게 다를게 없어보이지만,
+진정한 인스톨, 말하자면 운영체제에 kafka가 제대로 등록되어 시스템데몬으로 동작하는걸 볼 수 있을것이다.
+- 로그는 /var/log
+- 데이터는 /var/lib
+- 계정은 kafka, zookeeper
+
+*주의 : 본 RPM으로 클러스터구성을 하고자한다면, 반드시 zookeeper를 위한 cluster멤버파일 생성하는걸 잊지말것.
+        잊어도 로그파일에서 cluster멤버파일이 없으며, 구동할 수 없다는 메시지를 확인할 수 있을것이다.
+
+*주의 : Java는 1.7이라도 구동가능하다. 하지만, 웬만하면 1.8을 쓰는걸 권장한다.(Java보안)
+
+
+

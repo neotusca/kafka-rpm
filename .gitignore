@@ -1,0 +1,7 @@
+
+# compress file
+*.zip
+*.tgz
+
+# package file
+*.rpm

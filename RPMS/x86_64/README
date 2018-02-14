@@ -1,0 +1,22 @@
+
+
+
+
+kafka-0.10.0.1-1.x86_64.rpm.v3    <-- builded RPM from modified kafka.spece
+                                       - Final
+                                       - systemd init script  (kafka, zookeeper)
+                                       - /etc/systemd/system/kafka.service
+                                       - /etc/systemd/system/zookeeper.service
+
+
+kafka-0.10.0.1-1.x86_64.rpm.v2    <-- builded RPM from modified kafka.spece
+                                   - Environment : /etc/kafka  
+                                       - config.file
+                                   - HOME : /usr/share/kafka
+                                       - binary, library
+
+kafka-0.10.0.1-1.x86_64.rpm.v1  <-- builded RPM from default kafka.spec (kafka-rpm)
+                                   - HOME : /usr/share/kafka
+
+kafka-0.10.0.1-1.x86_64.rpm.org  <-- builded RPM from original kafka.spec 
+                                   - HOME : /opt/kafka
