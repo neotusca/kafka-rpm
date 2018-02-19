@@ -5,3 +5,8 @@
 
 # package file
 *.rpm
+
+# directory
+BUILD
+BUILDROOT
+RPMS

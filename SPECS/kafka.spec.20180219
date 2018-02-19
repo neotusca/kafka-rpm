@@ -2,18 +2,16 @@
 Summary: Kafka distributed topic based producer consumer queue
 Name: kafka
 Version: 0.11.0.2
-Release: 1.ML.20180219
+Release: 1.ML.20180108
 License: Apache (v2)
 Group: Applications
 URL: http://kafka.apache.org
 #Source0: http://archive.apache.org/dist/%{name}/%{version}/%{name}-%{version}-src.tgz
-#Source0: http://ftp.daum.net/apache/%{name}/%{version}/%{name}_2.12-%{version}.tgz
-Source0: http://ftp.daum.net/apache/%{name}/%{version}/%{name}-%{version}-src.tgz
+Source0: http://ftp.daum.net/apache/%{name}/%{version}/%{name}_2.12-%{version}.tgz
 Source1: kafka.init
 Source2: kafka-zookeeper.init
 # Note: does not work with newer version of gradle.
-#%define gradle_version 2.8
-%define gradle_version 3.5
+%define gradle_version 2.8
 Source3: https://services.gradle.org/distributions/gradle-%{gradle_version}-bin.zip
 # Note: OS init script on systemd (Cent 7.x)
 Source4: kafka.service
@@ -52,7 +50,7 @@ exit 0
 
 
 %prep
-#%setup -q -n %{name}_2.12-%{version}
+%setup -q -n %{name}_2.12-%{version}
 #%setup -q -n %{name}-%{version}-src
 
 
@@ -73,23 +71,23 @@ mkdir -p %{buildroot}%{_sharedstatedir}/kafka
 mkdir -p %{buildroot}%{_localstatedir}/log/zookeeper
 mkdir -p %{buildroot}%{_sharedstatedir}/zookeeper
 
-cp -r %{_builddir}/%{name}-%{version}-src/bin     %{buildroot}%{kafka_home}
-cp -r %{_builddir}/%{name}-%{version}-src/config  %{buildroot}%{kafka_home}/config-sample
-sed "s,log.dirs=.*,log.dirs=%{_sharedstatedir}/kafka," %{_builddir}/%{name}-%{version}-src/config/server.properties >%{buildroot}%{kafka_home}/config/server.properties
-sed "s,dataDir=.*,dataDir=%{_sharedstatedir}/zookeeper," %{_builddir}/%{name}-%{version}-src/config/zookeeper.properties >%{buildroot}%{kafka_home}/config/zookeeper.properties
-cp %{_builddir}/%{name}-%{version}-src/config/log4j.properties        %{buildroot}%{kafka_home}/config
-cp %{_builddir}/%{name}-%{version}-src/config/tools-log4j.properties  %{buildroot}%{kafka_home}/config
-cp -n %{_builddir}/%{name}-%{version}-src/*/build/libs/* %{buildroot}%{kafka_home}/libs
-cp -n %{_builddir}/%{name}-%{version}-src/*/build/dependant-libs*/* %{buildroot}%{kafka_home}/libs
-cp -n %{_builddir}/%{name}-%{version}-src/*/*/build/libs/* %{buildroot}%{kafka_home}/libs
-cp -n %{_builddir}/%{name}-%{version}-src/*/*/build/dependant-libs*/* %{buildroot}%{kafka_home}/libs
-cp %{_builddir}/%{name}-%{version}-src/LICENSE %{buildroot}%{kafka_home}
-cp %{_builddir}/%{name}-%{version}-src/NOTICE %{buildroot}%{kafka_home}
+cp -r bin %{buildroot}%{kafka_home}
+cp -r libs  %{buildroot}%{kafka_home}
+cp -r config %{buildroot}%{kafka_home}/config-sample
+sed "s,log.dirs=.*,log.dirs=%{_sharedstatedir}/kafka," config/server.properties >%{buildroot}%{kafka_home}/config/server.properties
+sed "s,dataDir=.*,dataDir=%{_sharedstatedir}/zookeeper," config/zookeeper.properties >%{buildroot}%{kafka_home}/config/zookeeper.properties
+cp config/log4j.properties %{buildroot}%{kafka_home}/config
+cp config/tools-log4j.properties %{buildroot}%{kafka_home}/config
+#cp -n */build/libs/* %{buildroot}%{kafka_home}/libs
+#cp -n */build/dependant-libs*/* %{buildroot}%{kafka_home}/libs
+#cp -n */*/build/libs/* %{buildroot}%{kafka_home}/libs
+#cp -n */*/build/dependant-libs*/* %{buildroot}%{kafka_home}/libs
+cp LICENSE %{buildroot}%{kafka_home}
+cp NOTICE %{buildroot}%{kafka_home}
 
-sed -i '176i LOG_DIR=/var/log/kafka'                                            %{buildroot}%{kafka_home}/bin/kafka-run-class.sh
-sed -i '177i KAFKA_LOG4J_OPTS="-Dkafka.logs.dir=$LOG_DIR $KAFKA_LOG4J_OPTS"\n'  %{buildroot}%{kafka_home}/bin/kafka-run-class.sh  
-sed    "176s,LOG_DIR=\/var\/log\/kafka,LOG_DIR=\/var\/log\/zookeeper,"          %{buildroot}%{kafka_home}/bin/kafka-run-class.sh  >  %{buildroot}%{kafka_home}/bin/zookeeper-run-class.sh
-sed -i "s,kafka-run,zookeeper-run,"                                             %{buildroot}%{kafka_home}/bin/zookeeper-server-start.sh
+sed "162i LOG_DIR=/var/log/kafka" bin/kafka-run-class.sh  > %{buildroot}%{kafka_home}/bin/kafka-run-class.sh
+sed "162i LOG_DIR=/var/log/zookeeper" bin/kafka-run-class.sh  > %{buildroot}%{kafka_home}/bin/zookeeper-run-class.sh
+sed "s,kafka-run,zookeeper-run,"  bin/zookeeper-server-start.sh >  %{buildroot}%{kafka_home}/bin/zookeeper-server-start.sh
 chmod 755  %{buildroot}%{kafka_home}/bin/zookeeper-run-class.sh
 
 mkdir -p %{buildroot}/etc/rc.d/init.d
@@ -127,7 +125,7 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Mon Feb 19 2018 "Lee taehun" <neotusca@gmail.com>
+* Mon Jan  8 2018 "Lee taehun" <neotusca@gmail.com>
 - Kafka source upgrade (0.10.0.1 -> 0.11.0.2)
 * Wed Dec 27 2017 "Lee taehun" <neotusca@gmail.com>
 - make logs directory as position-holder
